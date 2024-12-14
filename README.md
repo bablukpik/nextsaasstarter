@@ -27,7 +27,7 @@ This is a NextJS SaaS starter template for building a SaaS application with supp
 ```bash
 git clone https://github.com/bablukpik/saasstarter
 cd saasstarter
-pnpm install
+npm install
 ```
 
 ## Running Locally
@@ -35,14 +35,14 @@ pnpm install
 Use the included setup script to create your `.env` file:
 
 ```bash
-pnpm db:setup
+npm db:setup
 ```
 
 Then, run the database migrations and seed the database with a default user and team:
 
 ```bash
-pnpm db:migrate
-pnpm db:seed
+npm db:migrate
+npm db:seed
 ```
 
 This will create the following user and team:
@@ -55,7 +55,7 @@ You can, of course, create new users as well through `/sign-up`.
 Finally, run the Next.js development server:
 
 ```bash
-pnpm dev
+npm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
@@ -96,4 +96,5 @@ Add all the necessary environment variables:
 
 ## Documentation
 
-- [Role-Based Access Control (RBAC)](docs/rbac.md) - Comprehensive guide to our RBAC implementation
+- [Role-Based Access Control (RBAC)](docs/rbac.md) - Current status and future plans for RBAC
+- [Stripe Integration](docs/stripe.md) - Current status and future plans for Stripe integration
