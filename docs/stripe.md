@@ -24,45 +24,51 @@
 
 ### Database Schema Changes
 
+**Need to implement**
+
 ```sql
 -- Need to add these tables for better subscription management
 CREATE TABLE subscriptions (
-id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-user_id UUID REFERENCES users(id),
-stripe_subscription_id VARCHAR(255) NOT NULL,
-stripe_customer_id VARCHAR(255) NOT NULL,
-status VARCHAR(50) NOT NULL,
-plan_id VARCHAR(50) NOT NULL,
-current_period_start TIMESTAMP WITH TIME ZONE,
-current_period_end TIMESTAMP WITH TIME ZONE,
-cancel_at TIMESTAMP WITH TIME ZONE,
-canceled_at TIMESTAMP WITH TIME ZONE,
-created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  stripe_subscription_id VARCHAR(255) NOT NULL,
+  stripe_customer_id VARCHAR(255) NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  plan_id VARCHAR(50) NOT NULL,
+  current_period_start TIMESTAMP WITH TIME ZONE,
+  current_period_end TIMESTAMP WITH TIME ZONE,
+  cancel_at TIMESTAMP WITH TIME ZONE,
+  canceled_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE payment_methods (
-id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-user_id UUID REFERENCES users(id),
-stripe_payment_method_id VARCHAR(255) NOT NULL,
-type VARCHAR(50) NOT NULL,
-last_four VARCHAR(4),
-exp_month INTEGER,
-exp_year INTEGER,
-is_default BOOLEAN DEFAULT false,
-created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES users(id),
+  stripe_payment_method_id VARCHAR(255) NOT NULL,
+  type VARCHAR(50) NOT NULL,
+  last_four VARCHAR(4),
+  exp_month INTEGER,
+  exp_year INTEGER,
+  is_default BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE invoices (
-id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-subscription_id UUID REFERENCES subscriptions(id),
-stripe_invoice_id VARCHAR(255) NOT NULL,
-amount_due INTEGER NOT NULL,
-amount_paid INTEGER NOT NULL,
-status VARCHAR(50) NOT NULL,
-created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  subscription_id UUID REFERENCES subscriptions(id),
+  stripe_invoice_id VARCHAR(255) NOT NULL,
+  amount_due INTEGER NOT NULL,
+  amount_paid INTEGER NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
 ### Missing TypeScript Types
+
+**Need to implement**
 
 ```typescript
 interface Subscription {

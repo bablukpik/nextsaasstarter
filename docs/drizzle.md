@@ -59,22 +59,25 @@ CREATE TYPE role_enum AS ENUM ('OWNER', 'MEMBER');
 
 ### Schema Improvements
 
+**Need to implement these schema changes**
+
 ```sql
-// Need to implement these schema changes
 CREATE TABLE teams (
-id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-name VARCHAR(255) NOT NULL,
-slug VARCHAR(255) NOT NULL UNIQUE,
-created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
+  slug VARCHAR(255) NOT NULL UNIQUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE team_members (
-team_id UUID REFERENCES teams(id) ON DELETE CASCADE,
-user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-role role_enum NOT NULL DEFAULT 'MEMBER',
-created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-PRIMARY KEY (team_id, user_id)
+  team_id UUID REFERENCES teams(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  role role_enum NOT NULL DEFAULT 'MEMBER',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (team_id, user_id)
 );
+
 -- Add indexes
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_teams_slug ON teams(slug);
@@ -83,7 +86,7 @@ CREATE INDEX idx_team_members_user ON team_members(user_id);
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
-NEW.updated_at = CURRENT_TIMESTAMP;
+  NEW.updated_at = CURRENT_TIMESTAMP;
 RETURN NEW;
 END;
 $$ language 'plpgsql';

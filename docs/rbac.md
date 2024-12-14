@@ -9,13 +9,13 @@ This is the current implementation of Role-Based Access Control (RBAC) for this 
 ```sql
 // From lib/db/migrations/0000_soft_the_anarchist.sql
 enum role_enum {
-OWNER
-MEMBER
+  OWNER,
+  MEMBER,
 }
 table users {
-id uuid pk
-role role_enum
-// other fields...
+  id uuid pk
+  role role_enum
+  // other fields...
 }
 ```
 
@@ -41,23 +41,26 @@ role role_enum
 
 ```sql
 CREATE TABLE roles (
-id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-name VARCHAR(50) NOT NULL UNIQUE,
-description TEXT,
-created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(50) NOT NULL UNIQUE,
+  description TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE permissions (
-id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-name VARCHAR(50) NOT NULL UNIQUE,
-description TEXT,
-created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(50) NOT NULL UNIQUE,
+  description TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE role_permissions (
-role_id UUID REFERENCES roles(id),
-permission_id UUID REFERENCES permissions(id),
-PRIMARY KEY (role_id, permission_id)
+  role_id UUID REFERENCES roles(id),
+  permission_id UUID REFERENCES permissions(id),
+  PRIMARY KEY (role_id, permission_id)
 );
+
 -- Update users table
 ALTER TABLE users
 DROP COLUMN role,
@@ -89,6 +92,8 @@ interface User {
 ```
 
 ### Middleware Updates Needed
+
+**Need to implement**
 
 ```typescript
 // From lib/auth/middleware.ts
