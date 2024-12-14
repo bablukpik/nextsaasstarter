@@ -93,3 +93,7 @@ Add all the necessary environment variables:
 3. `STRIPE_WEBHOOK_SECRET`: Use the webhook secret from the production webhook you created in step 1.
 4. `POSTGRES_URL`: Set this to your production database URL.
 5. `AUTH_SECRET`: Set this to a random string. `openssl rand -base64 32` will generate one.
+
+## Documentation
+
+- [Role-Based Access Control (RBAC)](docs/rbac.md) - Comprehensive guide to our RBAC implementation
