@@ -248,3 +248,247 @@ export const withRole = (allowedRoles: string[]) => {
    - Role management scenarios
    - Permission scenarios
    - Error handling
+
+## Role Hierarchy
+
+```mermaid
+graph TD
+A[Super Admin] --> B[Admin]
+B --> C[Manager]
+C --> D[User]
+style A fill:#ff9999
+style B fill:#99ff99
+style C fill:#9999ff
+style D fill:#ffff99
+```
+
+## Implementation Files
+
+### Database Files
+
+1. **lib/db/migrations/0000_soft_the_anarchist.sql**
+
+```sql
+-- Role enum and base tables
+CREATE TYPE role_enum AS ENUM ('OWNER', 'MEMBER');
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  role role_enum NOT NULL DEFAULT 'MEMBER',
+  // other fields...
+);
+```
+
+### Authentication & Authorization Files
+
+1. **lib/auth/middleware.ts**
+
+```typescript
+// Middleware for role-based route protection
+import { NextResponse } from "next/server";
+import { getSession } from "./session";
+export async function withRole(role: string[]) {
+  return async function middleware(req: Request) {
+    const session = await getSession();
+    if (!session || !role.includes(session.user.role)) {
+      return NextResponse.redirect("/unauthorized");
+    }
+    return NextResponse.next();
+  };
+}
+```
+
+2. **lib/auth/session.ts**
+
+```typescript
+// Session management with role information
+import { cookies } from "next/headers";
+import { jwtVerify } from "jose";
+export async function getSession() {
+  const token = cookies().get("token");
+  if (!token) return null;
+  try {
+    const verified = await jwtVerify(token.value, secret);
+    return verified.payload;
+  } catch {
+    return null;
+  }
+}
+```
+
+3. **lib/auth/index.tsx**
+
+```typescript
+// Main auth context and hooks
+import { createContext, useContext } from "react";
+interface AuthContext {
+  user: User | null;
+  role: string;
+  permissions: string[];
+}
+export const AuthContext = createContext<AuthContext | null>(null);
+export function useAuth() {
+  return useContext(AuthContext);
+}
+export function useRole() {
+  const auth = useAuth();
+  return auth?.role;
+}
+export function usePermissions() {
+  const auth = useAuth();
+  return auth?.permissions ?? [];
+}
+```
+
+### UI Components
+
+1. **components/ui/role-gate.tsx**
+
+```typescript
+// Component for role-based UI rendering
+interface RoleGateProps {
+  allowedRoles: string[];
+  children: React.ReactNode;
+}
+export function RoleGate({ allowedRoles, children }: RoleGateProps) {
+  const role = useRole();
+  if (!role || !allowedRoles.includes(role)) {
+    return null;
+  }
+  return <>{children}</>;
+}
+```
+
+## Usage Examples
+
+### Protecting Routes
+
+```typescript
+// app/admin/page.tsx
+import { withRole } from "@/lib/auth/middleware";
+export const middleware = withRole(["ADMIN", "OWNER"]);
+```
+
+### Protecting UI Elements
+
+```typescript
+// components/admin-panel.tsx
+import { RoleGate } from "@/components/ui/role-gate";
+export function AdminPanel() {
+  return (
+    <RoleGate allowedRoles={["ADMIN", "OWNER"]}>
+      <div>Admin only content</div>
+    </RoleGate>
+  );
+}
+```
+
+### Protecting API Routes
+
+```typescript
+// app/api/admin/route.ts
+import { withRole } from "@/lib/auth/middleware";
+export const POST = withRole(["ADMIN"])(async (req) => {
+  // Admin only API logic
+});
+```
+
+## Required Dependencies
+
+```json
+{
+  "dependencies": {
+    "jose": "^4.14.4",
+    "next": "^13.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
+```
+
+## Implementation Steps
+
+1. **Database Setup**
+
+   - Copy the SQL migration file
+   - Run the migration
+   - Set up role enum types
+
+2. **Auth Setup**
+
+   - Copy auth middleware files
+   - Copy session management
+   - Set up auth context
+
+3. **UI Components**
+
+   - Copy role-gate component
+   - Implement in your components
+
+4. **Environment Variables**
+
+```env
+AUTH_SECRET=your_secret_here
+```
+
+## Best Practices
+
+1. **Role Definition**
+
+   - Keep roles simple and hierarchical
+   - Use enum types for roles
+   - Document role permissions
+
+2. **Security**
+
+   - Always verify roles server-side
+   - Never trust client-side role checks
+   - Implement proper session management
+
+3. **Performance**
+   - Cache role checks where possible
+   - Use middleware for route protection
+   - Implement proper error handling
+
+## Future Improvements
+
+1. **Advanced Features**
+
+   - Dynamic role creation
+   - Custom permission creation
+   - Time-based role assignments
+   - Location-based permissions
+
+2. **UI Improvements**
+
+   - Role management dashboard
+   - Permission visualization
+   - Role hierarchy diagram
+   - Access control matrix
+
+3. **Integration**
+   - SSO integration
+   - External role providers
+   - API access control
+   - Third-party service integration
+
+## Testing Requirements
+
+1. **Unit Tests**
+
+   - Role assignment logic
+   - Permission checking
+   - Middleware functionality
+   - Database operations
+
+2. **Integration Tests**
+
+   - Role-based access flows
+   - Permission inheritance
+   - API endpoints
+   - UI components
+
+3. **E2E Tests**
+   - Complete user flows
+   - Role management scenarios
+   - Permission scenarios
+   - Error handling

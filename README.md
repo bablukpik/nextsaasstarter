@@ -99,3 +99,4 @@ Add all the necessary environment variables:
 - [Role-Based Access Control (RBAC)](docs/rbac.md) - Current status and future plans for RBAC
 - [Stripe Integration](docs/stripe.md) - Current status and future plans for Stripe integration
 - [Drizzle ORM Implementation](docs/drizzle.md) - Current status and future plans for database implementation
+- [Authentication & Authorization](docs/auth.md) - Current status and future plans for authentication and authorization
