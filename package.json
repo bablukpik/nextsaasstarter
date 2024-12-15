@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:setup": "npx tsx lib/db/setup.ts",
-    "db:seed": "npx tsx lib/db/seed.ts",
+    "db:setup": "npx tsx ./src/lib/db/setup.ts",
+    "db:seed": "npx tsx ./src/lib/db/seed.ts",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "npx tsx lib/db/migrate.ts",
+    "db:migrate": "npx tsx ./src/lib/db/migrate.ts",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
