@@ -16,7 +16,7 @@ type ValidatedActionFunction<S extends z.ZodType<any, any>, T> = (
 
 export function validatedAction<S extends z.ZodType<any, any>, T>(
   schema: S,
-  action: ValidatedActionFunction<S, T>
+  action: ValidatedActionFunction<S, T>,
 ) {
   return async (prevState: ActionState, formData: FormData): Promise<T> => {
     const result = schema.safeParse(Object.fromEntries(formData));
@@ -36,7 +36,7 @@ type ValidatedActionWithUserFunction<S extends z.ZodType<any, any>, T> = (
 
 export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
   schema: S,
-  action: ValidatedActionWithUserFunction<S, T>
+  action: ValidatedActionWithUserFunction<S, T>,
 ) {
   return async (prevState: ActionState, formData: FormData): Promise<T> => {
     const user = await getUser();

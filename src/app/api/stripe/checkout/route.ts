@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 
     const userId = session.client_reference_id;
     if (!userId) {
-      throw new Error("No user ID found in session's client_reference_id.");
+      throw new Error('No user ID found in session\'s client_reference_id.');
     }
 
     const user = await db

@@ -43,28 +43,28 @@ function getRelativeTime(date: Date) {
 
 function formatAction(action: ActivityType): string {
   switch (action) {
-    case ActivityType.SIGN_UP:
-      return 'You signed up';
-    case ActivityType.SIGN_IN:
-      return 'You signed in';
-    case ActivityType.SIGN_OUT:
-      return 'You signed out';
-    case ActivityType.UPDATE_PASSWORD:
-      return 'You changed your password';
-    case ActivityType.DELETE_ACCOUNT:
-      return 'You deleted your account';
-    case ActivityType.UPDATE_ACCOUNT:
-      return 'You updated your account';
-    case ActivityType.CREATE_TEAM:
-      return 'You created a new team';
-    case ActivityType.REMOVE_TEAM_MEMBER:
-      return 'You removed a team member';
-    case ActivityType.INVITE_TEAM_MEMBER:
-      return 'You invited a team member';
-    case ActivityType.ACCEPT_INVITATION:
-      return 'You accepted an invitation';
-    default:
-      return 'Unknown action occurred';
+  case ActivityType.SIGN_UP:
+    return 'You signed up';
+  case ActivityType.SIGN_IN:
+    return 'You signed in';
+  case ActivityType.SIGN_OUT:
+    return 'You signed out';
+  case ActivityType.UPDATE_PASSWORD:
+    return 'You changed your password';
+  case ActivityType.DELETE_ACCOUNT:
+    return 'You deleted your account';
+  case ActivityType.UPDATE_ACCOUNT:
+    return 'You updated your account';
+  case ActivityType.CREATE_TEAM:
+    return 'You created a new team';
+  case ActivityType.REMOVE_TEAM_MEMBER:
+    return 'You removed a team member';
+  case ActivityType.INVITE_TEAM_MEMBER:
+    return 'You invited a team member';
+  case ActivityType.ACCEPT_INVITATION:
+    return 'You accepted an invitation';
+  default:
+    return 'Unknown action occurred';
   }
 }
 
@@ -86,7 +86,7 @@ export default async function ActivityPage() {
               {logs.map((log) => {
                 const Icon = iconMap[log.action as ActivityType] || Settings;
                 const formattedAction = formatAction(
-                  log.action as ActivityType
+                  log.action as ActivityType,
                 );
 
                 return (
@@ -115,7 +115,7 @@ export default async function ActivityPage() {
               </h3>
               <p className="text-sm text-gray-500 max-w-sm">
                 When you perform actions like signing in or updating your
-                account, they'll appear here.
+                account, they&apos;ll appear here.
               </p>
             </div>
           )}

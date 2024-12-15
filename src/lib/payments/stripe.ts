@@ -9,6 +9,7 @@ import {
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
+  typescript: true,
 });
 
 export async function createCheckoutSession({
@@ -59,7 +60,7 @@ export async function createCustomerPortalSession(team: Team) {
   } else {
     const product = await stripe.products.retrieve(team.stripeProductId);
     if (!product.active) {
-      throw new Error("Team's product is not active in Stripe");
+      throw new Error('Team\'s product is not active in Stripe');
     }
 
     const prices = await stripe.prices.list({
@@ -67,7 +68,7 @@ export async function createCustomerPortalSession(team: Team) {
       active: true,
     });
     if (prices.data.length === 0) {
-      throw new Error("No active prices found for the team's product");
+      throw new Error('No active prices found for the team\'s product');
     }
 
     configuration = await stripe.billingPortal.configurations.create({
