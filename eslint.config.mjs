@@ -22,6 +22,8 @@ const eslintConfig = [
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_$',
+          ignoreEnums: true,
+          ignoreRestSiblings: true,
         },
       ],
       '@typescript-eslint/no-unused-vars': 'off',

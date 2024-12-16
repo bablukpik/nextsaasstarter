@@ -3,20 +3,44 @@ import { DB_PATHS } from './constants';
 import { db, dbConn } from './db-config';
 
 const runMigrate = async () => {
-  console.log('⏳ Running migrations...');
-  
-  const start = Date.now();
-  await migrate(db, { migrationsFolder: DB_PATHS.MIGRATIONS });
-  const end = Date.now();
+  try {
+    console.log('⏳ INFO: Running migrations...');
+    const start = Date.now();
 
-  console.log(`✅ Migrations completed in ${end - start}ms`);
+    // Fetch existing tables (optional)
+    const existingTables = await dbConn`
+      SELECT tablename 
+      FROM pg_catalog.pg_tables 
+      WHERE schemaname = 'public'
+    `;
 
-  await dbConn.end();
-  process.exit(0);
+    if (existingTables.length > 0) {
+      console.log('⚠️  WARNING: Found existing tables:');
+      existingTables.forEach((table) => {
+        console.log(`   - ${table.tablename}`);
+      });
+    }
+
+    // Run migrations
+    await migrate(db, {
+      migrationsFolder: DB_PATHS.MIGRATIONS,
+    });
+
+    const end = Date.now();
+    console.log(`✅ INFO: Migrations completed in ${end - start}ms`);
+  } catch (error) {
+    console.error('❌ ERROR: Migration failed');
+    if (error instanceof Error) {
+      console.error(error.message);
+    } else {
+      console.error(error);
+    }
+    // Explicitly terminate on error
+    process.exit(1);
+  } finally {
+    await dbConn.end();
+    console.log('🔒 INFO: Database connection closed');
+  }
 };
 
-runMigrate().catch((err) => {
-  console.error('❌ Migration failed');
-  console.error(err);
-  process.exit(1);
-});
+runMigrate();
