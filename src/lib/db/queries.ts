@@ -1,8 +1,8 @@
 import { desc, and, eq, isNull } from 'drizzle-orm';
-import { db } from './db-config';
-import { activityLogs, teamMembers, teams, users } from './schema';
 import { cookies } from 'next/headers';
 import { verifyToken } from '@/lib/auth/session';
+import { activityLogs, teamMembers, teams, users } from './schema';
+import { db } from './db-config';
 
 export async function getUser() {
   const sessionCookie = (await cookies()).get('session');

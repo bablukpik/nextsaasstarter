@@ -1,6 +1,6 @@
-import path from 'path';
-
+// Don't use this for now path.join(process.cwd()) is not working in drizzle.config.ts file
 export const DB_PATHS = {
-  MIGRATIONS: path.join(process.cwd(), 'src', 'lib', 'db', 'migrations'),
-  SCHEMA: path.join(process.cwd(), 'src', 'lib', 'db', 'schema.ts'),
-} as const; 
+  MIGRATIONS: './src/lib/db/migrations',
+  MIGRATIONS_META: './src/lib/db/migrations/meta',
+  SCHEMA: './src/lib/db/schema',
+} as const;

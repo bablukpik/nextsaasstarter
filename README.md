@@ -38,10 +38,21 @@ Use the included setup script to create your `.env` file:
 npm db:setup
 ```
 
-Then, run the database migrations and seed the database with a default user and team:
+Then, run the database migrations:
 
 ```bash
 npm db:migrate
+```
+
+or
+
+```bash
+npx drizzle-kit migrate
+```
+
+And then seed the database with a default user and team:
+
+```bash
 npm db:seed
 ```
 
