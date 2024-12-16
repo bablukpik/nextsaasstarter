@@ -1,5 +1,5 @@
 import { stripe } from '../payments/stripe';
-import { db } from './drizzle';
+import { db } from './db-config';
 import { users, teams, teamMembers } from './schema';
 import { hashPassword } from '@/lib/auth/session';
 

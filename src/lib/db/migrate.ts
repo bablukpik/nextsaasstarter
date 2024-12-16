@@ -1,16 +1,29 @@
-import dotenv from 'dotenv';
-import path from 'path';
+import * as dotenv from 'dotenv';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
-import { client, db } from './drizzle';
+import { db, dbConn } from './db-config';
+import { DB_PATHS } from './constants';
 
 dotenv.config();
 
-async function main() {
-  await migrate(db, {
-    migrationsFolder: path.join(process.cwd(), '/lib/db/migrations'),
-  });
-  console.log('Migrations complete');
-  await client.end();
-}
+const runMigrate = async () => {
+  if (!process.env.DATABASE_URL) {
+    throw new Error('DATABASE_URL is not defined');
+  }
 
-main();
+  console.log('⏳ Running migrations...');
+  
+  const start = Date.now();
+  await migrate(db, { migrationsFolder: DB_PATHS.MIGRATIONS });
+  const end = Date.now();
+
+  console.log(`✅ Migrations completed in ${end - start}ms`);
+  process.exit(0);
+};
+
+runMigrate().catch((err) => {
+  console.error('❌ Migration failed');
+  console.error(err);
+  process.exit(1);
+}).finally(() => {
+  dbConn.end();
+});
