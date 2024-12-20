@@ -1,6 +1,6 @@
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
 import { DB_PATHS } from './constants';
-import { db, dbConn } from './db-config';
+import { db } from './db-config';
 
 const runMigrate = async () => {
   try {
@@ -8,7 +8,7 @@ const runMigrate = async () => {
     const start = Date.now();
 
     // Fetch existing tables (optional)
-    const existingTables = await dbConn`
+    const existingTables = await db.$client`
       SELECT tablename 
       FROM pg_catalog.pg_tables 
       WHERE schemaname = 'public'
@@ -38,7 +38,7 @@ const runMigrate = async () => {
     // Explicitly terminate on error
     process.exit(1);
   } finally {
-    await dbConn.end();
+    await db.$client.end();
     console.log('🔒 INFO: Database connection closed');
   }
 };

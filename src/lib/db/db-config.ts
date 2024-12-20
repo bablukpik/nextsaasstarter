@@ -1,30 +1,23 @@
+import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import dotenv from 'dotenv';
 import * as schema from './schema';
 
-dotenv.config();
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL environment variable is not set');
+}
 
-// Returns a connection with configurable options
-export const createDbConnection = (connectionString: string, opts = {}) => {
-  if (!connectionString) throw new Error('DATABASE_URL is not defined');
+const IDLE_TIMEOUT = 30000;
+const MAX_LIFETIME = 30000;
 
-  // Set max connections to 1 for migrations and seeding to prevent conflicts
-  // This is a good practice for data consistency since these operations should run sequentially
-  let max = undefined;
-  if ((process.env.DB_MIGRATING || process.env.DB_SEEDING)) {
-    max = 1;
-  }
-
-  return postgres(connectionString, {
-    idle_timeout: 30000,
-    max_lifetime: 30000,
-    max,
-    ...opts,
-  });
-};
-
-export const dbConn = createDbConnection(process.env.DATABASE_URL!);
-
-// Create a drizzle instance
-export const db = drizzle(dbConn, { schema, logger: true });
+// Set max connections to 1 for running migrations and seeding sequentially to prevent conflicts
+export const db = drizzle({
+  connection: {
+    url: process.env.DATABASE_URL,
+    max: (process.env.DB_MIGRATING || process.env.DB_SEEDING) ? 1 : undefined,
+    idle_timeout: IDLE_TIMEOUT,
+    max_lifetime: MAX_LIFETIME,
+  },
+  schema,
+  casing: 'snake_case',
+  logger: true,
+});

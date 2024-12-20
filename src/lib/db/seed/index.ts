@@ -1,4 +1,4 @@
-import { db, dbConn } from '../db-config';
+import { db } from '../db-config';
 import { users, teams, teamMembers } from '../schema/schema';
 import { hashPassword } from '@/lib/auth/session';
 import { createStripeProducts } from './stripe-products';
@@ -46,6 +46,6 @@ seed()
   })
   .finally(async () => {
     console.log('Seed process finished. Exiting...');
-    await dbConn.end(); 
+    await db.$client.end();
     process.exit(0);
   });
