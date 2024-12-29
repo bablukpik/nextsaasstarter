@@ -25,8 +25,8 @@ This is a NextJS SaaS starter template for building a SaaS application with supp
 ## Getting Started
 
 ```bash
-git clone https://github.com/bablukpik/saasstarter
-cd saasstarter
+git clone https://github.com/bablukpik/nextsaasstarter
+cd nextsaasstarter
 npm install
 ```
 
@@ -35,13 +35,13 @@ npm install
 Use the included setup script to create your `.env` file:
 
 ```bash
-npm db:setup
+npm run db:setup
 ```
 
 Then, run the database migrations:
 
 ```bash
-npm db:migrate
+npm run db:migrate
 ```
 
 or
@@ -53,7 +53,7 @@ npx drizzle-kit migrate
 And then seed the database with a default user and team:
 
 ```bash
-npm db:seed
+npm run db:seed
 ```
 
 This will create the following user and team:
@@ -66,7 +66,7 @@ You can, of course, create new users as well through `/signup`.
 Finally, run the Next.js development server:
 
 ```bash
-npm dev
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to see the app in action.
